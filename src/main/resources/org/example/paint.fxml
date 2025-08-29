@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+            <!-- find what borderpane is -->
+<?import javafx.scene.canvas.Canvas?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.PainController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="Save" onAction="#onSave"/>
+                    <MenuItem text="Save as" onAction="#onSaveAs"/>
+                    <MenuItem text="Exit" onAction="#onExit"/>
+                    <MenuItem text="Load Image" onAction="#onLoadImage"/>
+                </Menu>
+
+            </MenuBar>
+        </VBox>
+
+    </top>
+
+    <center>
+        <Canvas fx:id ="canvas" width="600" height="600"/>
+    </center>
+
+
+</BorderPane>
