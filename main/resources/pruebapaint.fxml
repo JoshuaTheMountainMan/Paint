@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.ColorPicker?>
+
+<?import javafx.scene.control.CustomMenuItem?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.canvas.Canvas?>
+
+<?import javafx.scene.control.skin.ColorPalette.ColorPickerGrid?>
+<?import javafx.scene.control.skin.SplitPaneSkin.Content?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.PainController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="File">
+                    <MenuItem text="Save" onAction="#onSave"/>
+                    <MenuItem text="Save as" onAction="#onSaveAs"/>
+                    <!--MenuItem text="Exit" onAction="#onExit"/-->
+                    <MenuItem text="Load Image" onAction="#onLoadImage"/>
+                </Menu>
+
+
+                <Menu text = "Help">
+                    <MenuItem text="How to use" onAction="#onHelp"/>
+                    <MenuItem text = "About" onAction="#onAbout"/>
+                </Menu>
+            </MenuBar>
+
+            <ToolBar>
+                <HBox alignment="CENTER" spacing="5">
+                    <Label text = "Brush Size"/>
+                    <TextField fx:id="brushSize" text="1" maxWidth="40" onAction="#onBrushSize"/>
+                    <ColorPicker fx:id="colorPicker"/>
+                </HBox>
+            </ToolBar>
+
+
+
+
+        </VBox>
+
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" fitToHeight="true">
+            <Canvas fx:id ="canvas" width="600" height="600"/>
+        </ScrollPane>
+    </center>
+
+
+</BorderPane>
