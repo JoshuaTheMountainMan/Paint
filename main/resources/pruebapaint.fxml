@@ -13,19 +13,21 @@
 
 <?import javafx.scene.control.skin.ColorPalette.ColorPickerGrid?>
 <?import javafx.scene.control.skin.SplitPaneSkin.Content?>
-<BorderPane xmlns="http://javafx.com/javafx"
+<?import javafx.scene.paint.Color?>
+<BorderPane fx:id="borderPane"
+            xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.example.PainController"
-            prefHeight="400.0" prefWidth="600.0">
+            prefHeight="400" prefWidth="600">
 
     <top>
         <VBox>
             <MenuBar>
                 <Menu text="File">
-                    <MenuItem text="Save" onAction="#onSave"/>
-                    <MenuItem text="Save as" onAction="#onSaveAs"/>
-                    <!--MenuItem text="Exit" onAction="#onExit"/-->
-                    <MenuItem text="Load Image" onAction="#onLoadImage"/>
+
+                    <MenuItem text="Save" onAction="#onSave" accelerator="Ctrl+S"/>
+                    <MenuItem text="Save as" onAction="#onSaveAs" accelerator="Ctrl+Shift+S"/>
+                    <MenuItem text="Load Image" onAction="#onLoadImage" accelerator="Ctrl+L"/>
                 </Menu>
 
 
@@ -33,17 +35,40 @@
                     <MenuItem text="How to use" onAction="#onHelp"/>
                     <MenuItem text = "About" onAction="#onAbout"/>
                 </Menu>
+
+
+                <Menu text = "Tools">
+                    <MenuItem text = "Brush" onAction="#onBrush"/>
+                    <MenuItem text = "Eraser" onAction="#onEraser"/>
+                    <MenuItem text = "Dropper" onAction="#onDropper"/>
+                </Menu>
+
+
+                <Menu text = "Shapes">
+                    <MenuItem text = "2 Point Line" onAction="#onStraightLine"/>
+                    <MenuItem text = "Square" onAction="#onSquare"/>
+                    <MenuItem text = "Rectangle" onAction="#onRectangle"/>
+                    <MenuItem text = "Triangle" onAction="#onTriangle"/>
+                    <MenuItem text = "Ellipse" onAction="#onEllipse"/>
+                    <MenuItem text = "Circle" onAction="#onCircle"/>
+                    <MenuItem text = "Star" onAction="#onStar"/>
+                </Menu>
+
             </MenuBar>
 
             <ToolBar>
                 <HBox alignment="CENTER" spacing="5">
                     <Label text = "Brush Size"/>
                     <TextField fx:id="brushSize" text="1" maxWidth="40" onAction="#onBrushSize"/>
-                    <ColorPicker fx:id="colorPicker"/>
+                    <ColorPicker fx:id="colorPicker">
+                        <value>
+                            <Color fx:constant="BLACK"/>
+                        </value>
+                    </ColorPicker>
+                    <CheckBox fx:id="dashBox" text="Dashed Line Mode" onAction="#isDashChecked"/>
+
                 </HBox>
             </ToolBar>
-
-
 
 
         </VBox>
@@ -51,8 +76,8 @@
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" fitToHeight="true">
-            <Canvas fx:id ="canvas" width="600" height="600"/>
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true">
+            <Canvas fx:id ="canvas" width="5000" height="5000"/>
         </ScrollPane>
     </center>
 
