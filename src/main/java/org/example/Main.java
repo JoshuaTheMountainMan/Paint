@@ -6,18 +6,16 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-
 public class Main extends Application{
     @Override
 
     public void start(Stage stage) throws Exception {
 
-        //stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("paint.fxml"))));
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("paint.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/pruebapaint.fxml"));
         Scene scene = new Scene(loader.load());
-        PainController controler = loader.getController();
-        controler.setStage(stage);
+        org.example.PainController controller = loader.getController();
+        controller.setStage(stage);
 
         stage.setScene(scene);
 
@@ -29,6 +27,12 @@ public class Main extends Application{
         launch(args);
 
     }
+
+
+    /*
+    Q: Why do Java developers wear glasses?
+    A: Because they don't C#
+     */
 
 
 }
