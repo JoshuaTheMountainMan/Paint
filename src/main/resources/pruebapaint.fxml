@@ -14,6 +14,7 @@
 <?import javafx.scene.control.skin.ColorPalette.ColorPickerGrid?>
 <?import javafx.scene.control.skin.SplitPaneSkin.Content?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.image.ImageView?>
 <BorderPane fx:id="borderPane"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -42,6 +43,8 @@
                     <MenuItem text = "Eraser" onAction="#onEraser"/>
                     <MenuItem text = "Dropper" onAction="#onDropper"/>
                     <MenuItem text = "Move Image" onAction="#onMoveImage"/>
+                    <MenuItem text = "Select area" onAction="#onSelectionTool"/>
+
                 </Menu>
 
 
@@ -54,6 +57,12 @@
                     <MenuItem text = "Circle" onAction="#onCircle"/>
                     <MenuItem text = "Star" onAction="#onStar"/>
                 </Menu>
+
+                <Menu text = "Actions">
+                    <MenuItem text = "Undo" onAction="#onUndo" accelerator="Ctrl + Z"/>
+                    <MenuItem text = "Redo" onAction="#onRedo" accelerator="Ctrl + Y"/>
+                </Menu>
+
 
 
             </MenuBar>
@@ -78,8 +87,16 @@
     </top>
 
     <center>
-        <ScrollPane fx:id="scrollPane" fitToWidth="true" fitToHeight="true">
-            <Canvas fx:id ="canvas" width="5000" height="5000"/>
+        <ScrollPane fx:id="scrollPane" >
+            <StackPane fx:id="workspaceStack" prefWidth="5000" prefHeight="5000">
+                <Pane fx:id="imageLayer">
+                    <ImageView fx:id="imageView"/>
+                </Pane>
+                <Pane fx:id="drawingLayer">
+                    <Canvas fx:id="canvas" width="5000" height="5000"/>
+                </Pane>
+                <Pane fx:id="backgroundLayer"/>
+            </StackPane>
         </ScrollPane>
     </center>
 
