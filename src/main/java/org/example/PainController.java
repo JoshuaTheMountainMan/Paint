@@ -17,11 +17,27 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javafx.scene.layout.StackPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+
     public class PainController {
+        public Pane drawingLayer;
+        public Pane backgroundLayer;
         @FXML
         BorderPane borderPane;
         @FXML
-        private Canvas canvas;
+        private Canvas canvas; // sigue siendo el draw canvas (brush)
+        @FXML public StackPane workspaceStack;
+        @FXML
+        private ImageView imageView;
+        @FXML private Pane imageLayer;
+        @FXML
+        private Pane shapesLayer;
+        @FXML
+        private Pane overlayPane;
+
+
         private Stage stage;
         private AlertWindow windowAlert = new AlertWindow();
         @FXML
@@ -43,21 +59,29 @@ import javafx.stage.Stage;
 
         private Image loadedImage;
 
+        private CanvasHistory history;
+        private LayerManager layerManager;
+        private SelectionTool selectionTool;
+        private FileMenu fileMenu;
+
 
 
         @FXML
         private void initialize() {
             canvasControl = new CanvasControl(canvas);
             setSizeableTool(new BrushTool());
+            layerManager = new LayerManager(imageView, imageLayer, shapesLayer, overlayPane, canvas);
 
-            //ZOOM
-            canvas.setOnScroll(event -> {
-                if (event.isControlDown()) { // Ctrl + Scroll
-                    double zoom = event.getDeltaY() > 0 ? 1.1 : 0.9;
-                    canvas.setScaleX(canvas.getScaleX() * zoom);
-                    canvas.setScaleY(canvas.getScaleY() * zoom);
-                }
-            });
+            history = new CanvasHistory(workspaceStack);
+            selectionTool = new SelectionTool();
+
+            drawingLayer.toFront();
+            canvas.setStyle("-fx-background-color: transparent;");
+
+            canvas.setMouseTransparent(false);
+            imageView.setMouseTransparent(true);
+
+
 
         }
 
@@ -70,6 +94,8 @@ import javafx.stage.Stage;
             clearMouseEvents(canvas);
             currentTool = tool;
             tool.install(canvas, canvasControl.getGraphCon(), colorPicker);
+
+            canvas.setOnMouseReleased(e -> history.saveState());
         }
 
         /**
@@ -81,6 +107,9 @@ import javafx.stage.Stage;
             currentSizeableTool = sizeableTool;
             currentSizeableTool.install(canvas, canvasControl.getGraphCon(), colorPicker);
             onBrushSize();
+
+            canvas.setOnMouseReleased(e -> history.saveState());
+
 
         }
 
@@ -123,13 +152,32 @@ import javafx.stage.Stage;
 
 
 
-
-
         // Connecting menu buttons to the ones in controller
 
         public void onSave() { fileMenuController.onSave(); }
         public void onSaveAs() { fileMenuController.onSaveAs(); }
-        public void onLoadImage() { loadedImage = fileMenuController.onLoadImage(); }
+
+        public void onLoadImage() {
+            Image img = fileMenuController.onLoadImage();
+            if (img != null) {
+                loadedImage = img;
+                layerManager.setMainImage(img);
+
+                imageView.setMouseTransparent(true);
+                canvas.setMouseTransparent(false);
+
+                drawingLayer.toFront();
+                history.saveState();
+
+            }
+        }
+
+        public void onSelectionTool() {
+            selectionTool.install(overlayPane, imageView, layerManager, history);
+        }
+
+
+
         public void onExit() { javafx.application.Platform.exit(); }
 
         public void onHelp(){ windowAlert.showHelpMenu();}
@@ -140,7 +188,16 @@ import javafx.stage.Stage;
 
 
         public void onBrushSize(){currentSizeableTool.setSize(Double.parseDouble(brushSize.getText())); isDashChecked();}
-        public void onBrush(){setSizeableTool(new BrushTool());}
+
+        public void onBrush(){
+            BrushTool brushTool = new BrushTool();
+            brushTool.install(canvas, canvas.getGraphicsContext2D(), colorPicker);
+            imageView.setMouseTransparent(true);
+            canvas.setMouseTransparent(false);
+            drawingLayer.toFront();
+        }
+
+
         public void onEraser(){setSizeableTool(new EraserTool());}
         public void onDropper(){setTool(new DropperTool());}
         public void onStraightLine(){setSizeableTool(new LineTool());}
@@ -150,12 +207,19 @@ import javafx.stage.Stage;
         public void onCircle(){setSizeableTool(new RectangleTool(Shapes.CIRCLE));}
         public void onTriangle(){setSizeableTool(new TriangleTool());}
         public void onStar(){setSizeableTool(new StarTool());}
+        //public void onMoveImage(){if (loadedImage != null) {setTool(new MoveImageTool(loadedImage));}}
 
 
-        public void onMoveImage(){if (loadedImage != null) {
-            setTool(new MoveImageTool(loadedImage));
-        } else {
-            System.out.println("No hay imagen cargada, Primero carga una imagen antes de moverla.");
-        }}
+        public void onUndo(){history.undo();}
+        public void onRedo(){history.redo();}
+
+
+        public void onMoveImage() {
+            imageView.toFront();
+            imageView.setMouseTransparent(false);
+            canvas.setMouseTransparent(true);
+            layerManager.makeNodeDraggable(layerManager.getImageView(), history);
+        }
+
 
     }

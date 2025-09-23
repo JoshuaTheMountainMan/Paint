@@ -136,8 +136,7 @@ public class FileMenu {
      * Filters saved files by type.
      */
     public Image onLoadImage() {
-        FileChooser fileChooser = new FileChooser(); //Max - you can create a fileChooser object as a private field at the top of your class and initialize/add extension filters for
-                                                     // it in your constructor, that way you won't have to do that twice in saveAs/loadImage
+        FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Image");
 
         //Lets the user choose what format of picture to select
@@ -149,18 +148,8 @@ public class FileMenu {
         );
         loadedImage = fileChooser.showOpenDialog(stage);
 
-        //MOVE TO CANVAS CONTROL (Not a file feature)
         if (loadedImage != null) {
-            Image image = new Image(loadedImage.toURI().toString());
-           // canvas.setHeight(image.getHeight());
-            //canvas.setWidth(image.getWidth());
-
-            GraphicsContext gc = canvas.getGraphicsContext2D();
-
-            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-            gc.drawImage(image, 0, 0);
-
-            return image;
+            return new Image(loadedImage.toURI().toString());
         };
         return null;
     }
